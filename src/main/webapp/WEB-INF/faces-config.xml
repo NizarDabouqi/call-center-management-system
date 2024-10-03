@@ -4,7 +4,23 @@
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
                                   http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
+    <!--
+
+    The faces-config.xml file is a core JSF configuration file.
+
+
+    faces-config.xml file is used to configure JSF (JavaServer Faces) settings.
+    it integrates JSF with Spring by defining the EL (Expression Language)
+    resolver for accessing Spring beans within JSF pages.
+
+    -->
+
     <application>
+        <!--
+        The SpringBeanFacesELResolver allows JSF to access Spring-managed beans
+        through JSF's Expression Language (EL). This enables you to inject Spring beans
+        into JSF-managed beans and use them within JSF pages.
+        -->
         <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
     </application>
 

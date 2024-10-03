@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Agent Dashboard</title>
+</h:head>
+
+<h:body>
+    <h:form>
+        <p:panel header="Call Center Management Dashboard" styleClass="container">
+            <h1>Agents:</h1>
+
+            <p:poll interval="1" listener="#{callCenterSystemController.refreshAgents}" update="agentTable"/>
+
+            <p:dataTable id="agentTable" value="#{callCenterSystemController.agents}" var="agent" responsive="true"
+                         paginator="false" styleClass="agent-table" rowHover="true">
+                <p:column headerText="Agent ID">
+                    <h:outputText value="#{agent.agentID}"/>
+                </p:column>
+                <p:column headerText="Agent Name">
+                    <h:outputText value="#{agent.agentName}"/>
+                </p:column>
+                <p:column headerText="Status">
+                    <h:outputText value="#{agent.status}"/>
+                </p:column>
+                <p:column headerText="Total Calls">
+                    <h:outputText value="#{agent.totalNumberOfCalls}"/>
+                </p:column>
+                <p:column headerText="Status Update Time">
+                    <h:outputText value="#{agent.statusUpdateTime}"/>
+                </p:column>
+            </p:dataTable>
+
+            <h1>Calls:</h1>
+            <p:poll interval="1" listener="#{callCenterSystemController.refreshCalls}" update="callTable"/>
+
+            <p:dataTable id="callTable" value="#{callCenterSystemController.calls}" var="call" responsive="true"
+                         paginator="false" styleClass="call-table">
+
+                <p:column headerText="Call ID">
+                    <h:outputText value="#{call.callID}"/>
+                </p:column>
+
+                <p:column headerText="Agent ID">
+                    <h:outputText value="#{call.agentID}"/>
+                </p:column>
+
+                <p:column headerText="Start Time">
+                    <h:outputText value="#{call.startTime}"/>
+                </p:column>
+
+                <p:column headerText="End Time">
+                    <h:outputText value="#{call.endTime}"/>
+                </p:column>
+
+                <p:column headerText="Duration (MM:SS)">
+                    <h:outputText value="#{call.formattedDuration}"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </h:form>
+</h:body>
+</html>

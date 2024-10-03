@@ -1,28 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE web-app PUBLIC
         "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+        "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<!--
+    The web.xml file in this project serves as a deployment descriptor
+    for configuring both the JSF and Spring MVC frameworks. It defines
+    servlets, context parameters, listeners, and URL mappings needed
+    for initializing and routing the application.
+-->
 
 <web-app>
     <display-name>call-center-management-system</display-name>
 
+    <!-- Spring context class definition -->
+    <context-param>
+        <!-- Specifies the class to be used for Spring's application context -->
+        <param-name>contextClass</param-name>
+        <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+    </context-param>
+
+    <!-- Context configuration package for Spring -->
+    <context-param>
+        <!-- Location of Spring configuration classes -->
+        <param-name>contextConfigLocation</param-name>
+        <param-value>com.eastnets.call_center_management_system</param-value>
+    </context-param>
+
+    <!-- Listeners for managing application context and request context -->
+    <listener>
+        <!-- Loads the Spring application context at startup -->
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <listener>
+        <!-- Manages request-scoped beans for Spring -->
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+
+    <!-- JSF servlet definition for handling Faces requests -->
     <servlet>
+        <!-- Name of the servlet handling JSF requests -->
         <servlet-name>FacesServlet</servlet-name>
+        <!-- Class for handling JSF lifecycle -->
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <!-- Load this servlet at application startup -->
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <!-- Spring DispatcherServlet (front-controller) definition for handling Spring MVC requests -->
+    <servlet>
+        <!-- Name of the Spring MVC DispatcherServlet -->
+        <servlet-name>dispatcher</servlet-name>
+        <!-- DispatcherServlet class that handles routing for Spring MVC -->
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- Defines Spring's application context class -->
+        <init-param>
+            <param-name>contextClass</param-name>
+            <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+        </init-param>
+        <!-- Load this servlet at startup -->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- URL mapping for JSF (JavaServer Faces) pages -->
     <servlet-mapping>
+        <!-- Map all URLs starting with /faces/ to the JSF servlet -->
         <servlet-name>FacesServlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
+        <!-- Map all URLs ending with .xhtml to the JSF servlet -->
         <servlet-name>FacesServlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
+    <!-- URL mapping for Spring MVC requests -->
+    <servlet-mapping>
+        <!-- Map all root-level requests ("/") to the Spring DispatcherServlet -->
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- Defines the default welcome page for the application -->
     <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
+        <!-- Specifies that faces/dashboard.xhtml is the default page -->
+        <welcome-file>faces/views/dashboard.xhtml</welcome-file>
     </welcome-file-list>
 
 </web-app>
