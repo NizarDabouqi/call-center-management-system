@@ -6,6 +6,13 @@
 
 <h:head>
     <title>Agent Dashboard</title>
+
+    <script type="text/javascript">
+        function resetFocus() {
+            document.activeElement.blur();
+        }
+    </script>
+
 </h:head>
 
 <h:body>
@@ -16,21 +23,34 @@
             <p:poll interval="1" listener="#{callCenterSystemController.refreshAgents}" update="agentTable"/>
 
             <p:dataTable id="agentTable" value="#{callCenterSystemController.agents}" var="agent" responsive="true"
-                         paginator="false" styleClass="agent-table" rowHover="true">
+                         paginator="false" styleClass="agent-table">
                 <p:column headerText="Agent ID">
                     <h:outputText value="#{agent.agentID}"/>
                 </p:column>
+
                 <p:column headerText="Agent Name">
                     <h:outputText value="#{agent.agentName}"/>
                 </p:column>
+
                 <p:column headerText="Status">
                     <h:outputText value="#{agent.status}"/>
                 </p:column>
+
                 <p:column headerText="Total Calls">
                     <h:outputText value="#{agent.totalNumberOfCalls}"/>
                 </p:column>
+
                 <p:column headerText="Status Update Time">
-                    <h:outputText value="#{agent.statusUpdateTime}"/>
+                    <h:outputText value="#{agent.formattedStatusUpdateTime}"/>
+                </p:column>
+
+                <p:column headerText="Change Status">
+                    <p:commandButton value="Toggle Status"
+                                     action="#{callCenterSystemController.toggleAgentStatus(agent.agentID)}"
+                                     update=":@form"
+                                     disabled="#{agent.status == 'ON_CALL'}">
+                        <p:ajax update="@form" oncomplete="resetFocus()"/>
+                    </p:commandButton>
                 </p:column>
             </p:dataTable>
 
@@ -56,7 +76,7 @@
                     <h:outputText value="#{call.endTime}"/>
                 </p:column>
 
-                <p:column headerText="Duration (MM:SS)">
+                <p:column headerText="Duration">
                     <h:outputText value="#{call.formattedDuration}"/>
                 </p:column>
             </p:dataTable>
@@ -64,3 +84,5 @@
     </h:form>
 </h:body>
 </html>
+
+

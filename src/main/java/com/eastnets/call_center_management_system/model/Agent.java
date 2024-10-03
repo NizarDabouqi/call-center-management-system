@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 @Setter
 @Getter
 @NoArgsConstructor
@@ -17,18 +15,20 @@ public class Agent {
     private String agentName;
     private AgentStatus status;
     private long totalNumberOfCalls;
-    private LocalDateTime statusUpdateTime;
+    private long statusUpdateTime;
 
     public Agent(String agentID, String agentName) {
         this.agentID = agentID;
         this.agentName = agentName;
         this.status = AgentStatus.READY;
         this.totalNumberOfCalls = 0;
-        this.statusUpdateTime = LocalDateTime.now();
+        this.statusUpdateTime = 0;
     }
 
-    public void setStatus(AgentStatus status) {
-        this.status = status;
-        this.statusUpdateTime = LocalDateTime.now();
+    public String getFormattedStatusUpdateTime() {
+        long hours = statusUpdateTime / 3600;
+        long minutes = (statusUpdateTime % 3600) / 60;
+        long seconds = statusUpdateTime % 60;
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 }

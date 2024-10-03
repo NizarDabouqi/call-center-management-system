@@ -13,4 +13,6 @@ public interface AgentRepository {
     void updateAgentState(Agent agent);
 
     Agent findAgentById(String agentID);
+
+    void updateAgentStatusTime(Agent agent);
 }

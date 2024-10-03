@@ -41,6 +41,7 @@ public class InitiateCallServiceImpl implements InitiateCallService {
         callRepository.saveCall(newCall);
 
         assignedAgent.setStatus(AgentStatus.ON_CALL);
+        assignedAgent.setStatusUpdateTime(0);
         agentRepository.updateAgentState(assignedAgent);
     }
 }

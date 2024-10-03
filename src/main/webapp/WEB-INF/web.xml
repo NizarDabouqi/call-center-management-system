@@ -88,5 +88,4 @@
         <!-- Specifies that faces/dashboard.xhtml is the default page -->
         <welcome-file>faces/views/dashboard.xhtml</welcome-file>
     </welcome-file-list>
-
 </web-app>

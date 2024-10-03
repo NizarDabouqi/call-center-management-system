@@ -55,4 +55,15 @@ public class AgentRepositoryImpl implements AgentRepository {
 
         return namedParameterJdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Agent.class));
     }
+
+    @Override
+    public void updateAgentStatusTime(Agent agent) {
+        String sql = "UPDATE Agent SET statusUpdateTime = :statusUpdateTime WHERE AgentID = :agentID";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("statusUpdateTime", agent.getStatusUpdateTime());
+        params.put("agentID", agent.getAgentID());
+
+        namedParameterJdbcTemplate.update(sql, params);
+    }
 }
