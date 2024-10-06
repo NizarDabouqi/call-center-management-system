@@ -45,12 +45,15 @@
                 </p:column>
 
                 <p:column headerText="Change Status">
-                    <p:commandButton value="Toggle Status"
-                                     action="#{callCenterSystemController.toggleAgentStatus(agent.agentID)}"
-                                     update=":@form"
-                                     disabled="#{agent.status == 'ON_CALL'}">
-                        <p:ajax update="@form" oncomplete="resetFocus()"/>
-                    </p:commandButton>
+                    <p:inputSwitch id="switchStatus"
+                                   value="#{agent.ready}"
+                                   onLabel="Ready"
+                                   offLabel="Not Ready"
+                                   disabled="#{agent.status == 'ON_CALL'}">
+                        <p:ajax listener="#{callCenterSystemController.toggleAgentStatus(agent.agentID)}"
+                                update="agentTable"
+                                oncomplete="resetFocus()"/>
+                    </p:inputSwitch>
                 </p:column>
             </p:dataTable>
 

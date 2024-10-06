@@ -1,7 +1,6 @@
 package com.eastnets.call_center_management_system.controller;
 
 import com.eastnets.call_center_management_system.model.Agent;
-import com.eastnets.call_center_management_system.model.AgentStatus;
 import com.eastnets.call_center_management_system.model.Call;
 import com.eastnets.call_center_management_system.service.agent.AgentService;
 import com.eastnets.call_center_management_system.service.call.CallService;

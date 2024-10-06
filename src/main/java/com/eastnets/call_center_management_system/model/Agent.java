@@ -31,4 +31,12 @@ public class Agent {
         long seconds = statusUpdateTime % 60;
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
+
+    public boolean isReady() {
+        return this.status == AgentStatus.READY;
+    }
+
+    public void setReady(boolean ready) {
+        this.status = ready ? AgentStatus.READY : AgentStatus.NOT_READY;
+    }
 }
