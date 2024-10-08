@@ -6,7 +6,5 @@ import java.util.List;
 
 public interface CallService {
 
-    void trackCallDuration();
-
     List<Call> getAllCalls();
 }

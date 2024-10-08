@@ -18,6 +18,7 @@ public class Call {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private long durationInSeconds;
+    private String endCallMessage;
 
     public Call(String callID, String agentID) {
         this.callID = callID;
@@ -25,6 +26,7 @@ public class Call {
         this.startTime = LocalDateTime.now();
         this.endTime = null;
         this.durationInSeconds = 0;
+        this.endCallMessage = "";
     }
 
     public String getFormattedDuration() {

@@ -6,9 +6,11 @@ import com.eastnets.call_center_management_system.model.Call;
 import com.eastnets.call_center_management_system.repository.agent.AgentRepository;
 import com.eastnets.call_center_management_system.repository.call.CallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -23,29 +25,42 @@ public class CloseCallServiceImpl implements CloseCallService {
     @Autowired
     private AgentRepository agentRepository;
 
-    @Override
+    @Value("${call.duration.threshold}")
+    private long callDurationThreshold;
+
+    @Value("${call.close.percentage}")
+    private int callClosePercentage;
+
     @Scheduled(fixedRate = 60000)
+    @Override
     public void closeCalls() {
         List<Call> activeCalls = callRepository.findActiveCalls();
 
         List<Call> longCalls = activeCalls.stream()
-                .filter(call -> call.getDurationInSeconds() > 10)
-                .sorted(Comparator.comparingLong(Call::getDurationInSeconds).reversed())
+                .filter(call -> Duration.between(call.getStartTime(), LocalDateTime.now()).getSeconds() > callDurationThreshold)
+                .sorted(Comparator.comparingLong(call -> Duration.between(((Call) call).getStartTime(), LocalDateTime.now()).getSeconds()).reversed())
                 .collect(Collectors.toList());
 
-        int numberOfCallsToClose = (int) Math.ceil(longCalls.size() * 0.75);
+        int numberOfCallsToClose = (int) Math.ceil(longCalls.size() * (callClosePercentage / 100.0));
 
         for (int i = 0; i < numberOfCallsToClose; i++) {
             Call call = longCalls.get(i);
+
+            call.setEndTime(LocalDateTime.now());
+
+            long finalDuration = Duration.between(call.getStartTime(), call.getEndTime()).getSeconds();
+            call.setDurationInSeconds(finalDuration);
+
+            call.setEndCallMessage("Closed by the system");
+
+            callRepository.updateCallDuration(call.getCallID(), finalDuration);
+            callRepository.updateCall(call);
 
             Agent agent = agentRepository.findAgentById(call.getAgentID());
             agent.setStatus(AgentStatus.READY);
             agent.setStatusUpdateTime(0);
             agent.setTotalNumberOfCalls(agent.getTotalNumberOfCalls() + 1);
             agentRepository.updateAgentState(agent);
-
-            call.setEndTime(LocalDateTime.now());
-            callRepository.updateCall(call);
         }
     }
 }

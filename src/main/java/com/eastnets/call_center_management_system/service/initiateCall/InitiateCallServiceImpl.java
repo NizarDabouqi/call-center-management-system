@@ -23,6 +23,8 @@ public class InitiateCallServiceImpl implements InitiateCallService {
     @Autowired
     private CallRepository callRepository;
 
+    private static long lastCallID = 0;
+
     @Scheduled(fixedRate = 10000)
     @Override
     public void insertCall() {
@@ -35,7 +37,8 @@ public class InitiateCallServiceImpl implements InitiateCallService {
         Random random = new Random();
         Agent assignedAgent = readyAgents.get(random.nextInt(readyAgents.size()));
 
-        String callID = System.currentTimeMillis() + "-" + random.nextInt(100);
+        //String callID = System.currentTimeMillis() + "-" + random.nextInt(100);
+        String callID = String.valueOf(++lastCallID);
         Call newCall = new Call(callID, assignedAgent.getAgentID());
 
         callRepository.saveCall(newCall);

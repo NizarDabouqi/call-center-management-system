@@ -18,8 +18,8 @@ public class CallRepositoryImpl implements CallRepository {
 
     @Override
     public void saveCall(Call call) {
-        String sql = "INSERT INTO call (callID, agentID, startTime, endTime, durationInSeconds) " +
-                "VALUES (:callID, :agentID, :startTime, :endTime, :durationInSeconds)";
+        String sql = "INSERT INTO call (callID, agentID, startTime, endTime, durationInSeconds, endCallMessage) " +
+                "VALUES (:callID, :agentID, :startTime, :endTime, :durationInSeconds, :endCallMessage)";
 
         Map<String, Object> params = new HashMap<>();
         params.put("callID", call.getCallID());
@@ -27,9 +27,11 @@ public class CallRepositoryImpl implements CallRepository {
         params.put("startTime", call.getStartTime());
         params.put("endTime", call.getEndTime());
         params.put("durationInSeconds", call.getDurationInSeconds());
+        params.put("endCallMessage", call.getEndCallMessage());
 
         namedParameterJdbcTemplate.update(sql, params);
     }
+
 
     @Override
     public List<Call> findActiveCalls() {
@@ -56,11 +58,12 @@ public class CallRepositoryImpl implements CallRepository {
 
     @Override
     public void updateCall(Call call) {
-        String sql = "UPDATE Call SET endTime = :endTime, durationInSeconds = :durationInSeconds WHERE callID = :callID";
+        String sql = "UPDATE Call SET endTime = :endTime, durationInSeconds = :durationInSeconds, endCallMessage = :endCallMessage WHERE callID = :callID";
 
         Map<String, Object> params = new HashMap<>();
         params.put("endTime", call.getEndTime());
         params.put("durationInSeconds", call.getDurationInSeconds());
+        params.put("endCallMessage", call.getEndCallMessage());
         params.put("callID", call.getCallID());
 
         namedParameterJdbcTemplate.update(sql, params);

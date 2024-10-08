@@ -66,4 +66,16 @@ public class AgentRepositoryImpl implements AgentRepository {
 
         namedParameterJdbcTemplate.update(sql, params);
     }
+
+    @Override
+    public long getTotalNumberOfCallsByAgentId(String agentID) {
+        String sql = "SELECT totalNumberOfCalls FROM Agent WHERE AgentID = :agentID";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("agentID", agentID);
+
+        Long totalCalls = namedParameterJdbcTemplate.queryForObject(sql, params, Long.class);
+
+        return totalCalls != null ? totalCalls : 0;
+    }
 }

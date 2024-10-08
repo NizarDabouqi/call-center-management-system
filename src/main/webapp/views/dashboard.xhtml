@@ -24,24 +24,25 @@
 
             <p:dataTable id="agentTable" value="#{callCenterSystemController.agents}" var="agent" responsive="true"
                          paginator="false" styleClass="agent-table">
+
                 <p:column headerText="Agent ID">
                     <h:outputText value="#{agent.agentID}"/>
-                </p:column>
-
-                <p:column headerText="Agent Name">
-                    <h:outputText value="#{agent.agentName}"/>
                 </p:column>
 
                 <p:column headerText="Status">
                     <h:outputText value="#{agent.status}"/>
                 </p:column>
 
-                <p:column headerText="Total Calls">
-                    <h:outputText value="#{agent.totalNumberOfCalls}"/>
+                <p:column headerText="Agent Name">
+                    <h:outputText value="#{agent.agentName}"/>
                 </p:column>
 
                 <p:column headerText="Status Update Time">
                     <h:outputText value="#{agent.formattedStatusUpdateTime}"/>
+                </p:column>
+
+                <p:column headerText="Total Calls">
+                    <h:outputText value="#{agent.totalNumberOfCalls}"/>
                 </p:column>
 
                 <p:column headerText="Change Status">
