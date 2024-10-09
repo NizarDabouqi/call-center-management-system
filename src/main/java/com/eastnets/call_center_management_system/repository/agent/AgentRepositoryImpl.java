@@ -34,8 +34,7 @@ public class AgentRepositoryImpl implements AgentRepository {
 
     @Override
     public void updateAgentState(Agent agent) {
-        String sql = "UPDATE Agent SET status = :status, statusUpdateTime = :statusUpdateTime, " +
-                "totalNumberOfCalls = :totalNumberOfCalls WHERE AgentID = :agentID";
+        String sql = "UPDATE Agent SET status = :status, statusUpdateTime = :statusUpdateTime, " + "totalNumberOfCalls = :totalNumberOfCalls WHERE AgentID = :agentID";
 
         Map<String, Object> params = new HashMap<>();
         params.put("status", agent.getStatus().name());
@@ -65,17 +64,5 @@ public class AgentRepositoryImpl implements AgentRepository {
         params.put("agentID", agent.getAgentID());
 
         namedParameterJdbcTemplate.update(sql, params);
-    }
-
-    @Override
-    public long getTotalNumberOfCallsByAgentId(String agentID) {
-        String sql = "SELECT totalNumberOfCalls FROM Agent WHERE AgentID = :agentID";
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("agentID", agentID);
-
-        Long totalCalls = namedParameterJdbcTemplate.queryForObject(sql, params, Long.class);
-
-        return totalCalls != null ? totalCalls : 0;
     }
 }

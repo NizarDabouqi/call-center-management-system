@@ -15,4 +15,6 @@ public interface CallRepository {
     List<Call> findAllCalls();
 
     void updateCall(Call call);
+
+    List<Call> findCallsByAgentId(String agentID);
 }

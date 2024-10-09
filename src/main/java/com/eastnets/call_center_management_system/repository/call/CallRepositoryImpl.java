@@ -68,4 +68,14 @@ public class CallRepositoryImpl implements CallRepository {
 
         namedParameterJdbcTemplate.update(sql, params);
     }
+
+    @Override
+    public List<Call> findCallsByAgentId(String agentID) {
+        String sql = "SELECT * FROM Call WHERE agentID = :agentID";
+
+        Map<String, String> params = new HashMap<>();
+        params.put("agentID", agentID);
+
+        return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Call.class));
+    }
 }

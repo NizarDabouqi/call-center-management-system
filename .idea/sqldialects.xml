@@ -3,5 +3,6 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/java/com/eastnets/call_center_management_system/repository/agent/AgentRepositoryImpl.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/eastnets/call_center_management_system/repository/call/CallRepositoryImpl.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/eastnets/call_center_management_system/repository/dailyAgentReport/DailyAgentReportRepositoryImpl.java" dialect="GenericSQL" />
   </component>
 </project>
