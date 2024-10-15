@@ -119,9 +119,16 @@
             <version>3.1.9.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.21.3</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <finalName>call-center-management-system</finalName>
     </build>
+
 </project>

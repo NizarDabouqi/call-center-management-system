@@ -22,7 +22,7 @@ public class AgentServiceImpl implements AgentService {
 
     @Scheduled(fixedRate = 1000)
     @Override
-    public void trackAgentStatusUpdateTime() {
+    public synchronized void trackAgentStatusUpdateTime() {
         List<Agent> agents = getAllAgents();
 
         for (Agent agent : agents) {
@@ -32,17 +32,20 @@ public class AgentServiceImpl implements AgentService {
     }
 
     @Override
-    public void toggleAgentStatus(String agentID) {
+    public synchronized void toggleAgentStatus(String agentID) {
         Agent agent = agentRepository.findAgentById(agentID);
+        agent.setStatusUpdateTime(0);
 
         if (!agent.getStatus().equals(AgentStatus.ON_CALL)) {
             if (agent.getStatus() == AgentStatus.READY) {
                 agent.setStatus(AgentStatus.NOT_READY);
-            } else {
-                agent.setStatus(AgentStatus.READY);
-            }
+                System.out.println("Status changed to NOT_READY");
 
-            agent.setStatusUpdateTime(0);
+            } else if (agent.getStatus() == AgentStatus.NOT_READY) {
+                agent.setTotalTimeNotReady(agent.getTotalTimeNotReady() + agent.getStatusUpdateTime());
+                agent.setStatus(AgentStatus.READY);
+                System.out.println("Status changed to READY");
+            }
             agentRepository.updateAgentState(agent);
         }
     }

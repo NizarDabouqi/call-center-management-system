@@ -16,6 +16,7 @@ public class Agent {
     private AgentStatus status;
     private long totalNumberOfCalls;
     private long statusUpdateTime;
+    private long totalTimeNotReady;
 
     public Agent(String agentID, String agentName) {
         this.agentID = agentID;
@@ -23,6 +24,7 @@ public class Agent {
         this.status = AgentStatus.READY;
         this.totalNumberOfCalls = 0;
         this.statusUpdateTime = 0;
+        this.totalTimeNotReady = 0;
     }
 
     public String getFormattedStatusUpdateTime() {

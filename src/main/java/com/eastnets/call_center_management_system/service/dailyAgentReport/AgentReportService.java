@@ -1,8 +1,13 @@
 package com.eastnets.call_center_management_system.service.dailyAgentReport;
 
-import com.eastnets.call_center_management_system.model.DailyAgentReport;
+import net.sf.jasperreports.engine.JRException;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public interface AgentReportService {
 
-    void generateDailyAgentReport();
+    void generateDailyAgentsReport();
+
+    public byte[] exportDailyReportToPDF() throws JRException, IOException;
 }

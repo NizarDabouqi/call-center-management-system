@@ -6,13 +6,20 @@ import com.eastnets.call_center_management_system.model.DailyAgentReport;
 import com.eastnets.call_center_management_system.repository.agent.AgentRepository;
 import com.eastnets.call_center_management_system.repository.call.CallRepository;
 import com.eastnets.call_center_management_system.repository.dailyAgentReport.DailyAgentReportRepository;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DailyAgentReportService implements AgentReportService {
@@ -26,7 +33,7 @@ public class DailyAgentReportService implements AgentReportService {
 
     @Scheduled(fixedRate = 61000)
     @Override
-    public void generateDailyAgentReport() {
+    public void generateDailyAgentsReport() {
         List<Agent> agents = agentRepository.findAllAgents();
 
         for (Agent agent : agents) {
@@ -66,15 +73,11 @@ public class DailyAgentReportService implements AgentReportService {
             report.setTotalTalkTime(totalTalkTime);
             report.setLongestTalkTime(longestTalkTime);
             report.setShortestTalkTime(shortestTalkTime);
-            report.setTotalTimeNotReady(calculateTotalTimeNotReady(agent));
+            report.setTotalTimeNotReady(agent.getTotalTimeNotReady());
             report.setAverageNumberOfCalls(calculateAverageNumberOfCalls(agent));
 
             dailyAgentReportRepository.saveOrUpdate(report);
         }
-    }
-
-    private long calculateTotalTimeNotReady(Agent agent) {
-        return 0;
     }
 
     private double calculateAverageNumberOfCalls(Agent agent) {
@@ -93,5 +96,24 @@ public class DailyAgentReportService implements AgentReportService {
                 .setScale(3, RoundingMode.HALF_UP);
 
         return roundedAverage.doubleValue();
+    }
+
+    public byte[] exportDailyReportToPDF() throws JRException, IOException {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("dailyAgentReport.jrxml");
+
+        if (inputStream == null) {
+            throw new FileNotFoundException("Jasper report file not found.");
+        }
+
+        JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+
+        List<DailyAgentReport> reports = dailyAgentReportRepository.findAll();
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reports);
+
+        Map<String, Object> parameters = new HashMap<>();
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+        return JasperExportManager.exportReportToPdf(jasperPrint);
     }
 }

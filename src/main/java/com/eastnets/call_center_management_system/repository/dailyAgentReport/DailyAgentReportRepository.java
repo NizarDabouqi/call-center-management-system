@@ -9,4 +9,8 @@ public interface DailyAgentReportRepository {
     void saveOrUpdate(DailyAgentReport report);
 
     DailyAgentReport findByAgentId(String agentID);
+
+    List<DailyAgentReport> findAll();
+
+    void deleteAll();
 }

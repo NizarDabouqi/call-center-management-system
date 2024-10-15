@@ -78,4 +78,10 @@ public class CallRepositoryImpl implements CallRepository {
 
         return namedParameterJdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(Call.class));
     }
+
+    @Override
+    public void deleteAll() {
+        String sql = "DELETE FROM Call";
+        namedParameterJdbcTemplate.update(sql, new HashMap<>());
+    }
 }

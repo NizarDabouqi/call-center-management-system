@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="dailyAgentReport" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802"
+              leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
+              uuid="7a5c9b49-9dc5-422a-ac69-e92cf61ef530">
+    <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+    <style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false"/>
+    <style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false"/>
+    <style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true"/>
+    <style name="Detail" mode="Transparent" fontName="Times New Roman"/>
+    <style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+        <conditionalStyle>
+            <conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+            <style mode="Opaque" backcolor="#F0EFEF"/>
+        </conditionalStyle>
+    </style>
+
+    <field name="agentID" class="java.lang.String">
+    </field>
+
+    <field name="totalNumberOfCalls" class="java.lang.Long">
+    </field>
+
+    <field name="totalTalkTime" class="java.lang.Long">
+    </field>
+
+    <field name="longestTalkTime" class="java.lang.Long">
+    </field>
+
+    <field name="shortestTalkTime" class="java.lang.Long">
+    </field>
+
+    <field name="totalTimeNotReady" class="java.lang.Long">
+    </field>
+
+    <field name="averageNumberOfCalls" class="java.lang.Double">
+    </field>
+
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="110" splitType="Stretch">
+            <frame>
+                <reportElement mode="Opaque" x="0" y="0" width="755" height="66" backcolor="#000000"
+                               uuid="d8d9e644-3a32-491d-97cb-a277aff17133"/>
+                <staticText>
+                    <reportElement style="Title" x="0" y="0" width="499" height="66"
+                                   uuid="27d8f6ee-f0a9-44f6-a160-1763c3b00f30"/>
+                    <box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+                    <textElement verticalAlignment="Bottom">
+                        <font isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Daily Agents Report]]></text>
+                </staticText>
+            </frame>
+            <frame>
+                <reportElement mode="Opaque" x="0" y="70" width="756" height="32" forecolor="#000000"
+                               backcolor="#CC0000" uuid="b0c895f6-6dbd-477d-9858-9ad66af087e1"/>
+                <textField pattern="EEEEE dd MMMMM yyyy">
+                    <reportElement x="553" y="12" width="144" height="20" forecolor="#FFFFFF"
+                                   uuid="a33fce3b-20c1-4696-873a-fe134d1e7d88"/>
+                    <textElement textAlignment="Right">
+                        <font size="12"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+                </textField>
+            </frame>
+        </band>
+    </title>
+    <pageHeader>
+        <band splitType="Stretch"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="27" splitType="Stretch">
+            <staticText>
+                <reportElement style="Column header" x="0" y="0" width="78" height="18" forecolor="#000000"
+                               uuid="c23309d0-93c4-4dcf-9d1c-e6c4989edf3c">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                              value="9f49b405-0fe7-4b3e-9ff8-6e3bda01fc6f"/>
+                    <property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+                </reportElement>
+                <textElement>
+                    <font isBold="false"/>
+                </textElement>
+                <text><![CDATA[Agent ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="Column header" x="78" y="0" width="146" height="18" forecolor="#000000"
+                               uuid="8beab716-b68b-4180-acb1-c4001f63b128">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                              value="d384a80d-c11f-4dff-923a-187518fbe5cd"/>
+                </reportElement>
+                <textElement>
+                    <font isBold="false"/>
+                </textElement>
+                <text><![CDATA[Total Calls]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="Column header" x="226" y="0" width="113" height="18" forecolor="#000000"
+                               uuid="bf47b5cc-6a1e-4089-b8f6-9792f5e9dc92">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                              value="f9a4f4e0-2d1d-40ea-bb6e-42e6cd93d3eb"/>
+                </reportElement>
+                <textElement>
+                    <font isBold="false"/>
+                </textElement>
+                <text><![CDATA[Total Talk Time]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="Column header" x="339" y="0" width="113" height="18" forecolor="#000000"
+                               uuid="ebf4535d-a6e6-4c58-8d42-3abd4f0b1f15">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                              value="fd83d692-961a-48e1-b961-dd00e0aea2e1"/>
+                </reportElement>
+                <textElement>
+                    <font isBold="false"/>
+                </textElement>
+                <text><![CDATA[Longest Talk]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="Column header" x="452" y="0" width="113" height="18" forecolor="#000000"
+                               uuid="3dbaf635-8e60-4563-be1d-567ec724389c">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                              value="2110214b-a3ce-4237-ad7b-f46a6a3b1d78"/>
+                </reportElement>
+                <textElement>
+                    <font isBold="false"/>
+                </textElement>
+                <text><![CDATA[Shortest Talk]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="Column header" x="565" y="0" width="113" height="18" forecolor="#000000"
+                               uuid="8fb9e519-f172-49ec-b562-dcf693e7d85e">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                              value="a0f35f4e-f186-4e3f-b39d-6276da0c4ca6"/>
+                </reportElement>
+                <textElement>
+                    <font isBold="false"/>
+                </textElement>
+                <text><![CDATA[Not Ready Time]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="Column header" x="678" y="0" width="113" height="18" forecolor="#000000"
+                               uuid="089fc0a7-6372-4462-98ef-83710520809a">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                              value="baf79210-f935-44e0-9fa9-3f9af97cb473"/>
+                </reportElement>
+                <textElement>
+                    <font isBold="false"/>
+                </textElement>
+                <text><![CDATA[Average Calls]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="18" splitType="Stretch">
+            <frame>
+                <reportElement style="Row" mode="Opaque" x="0" y="0" width="797" height="18"
+                               uuid="34a2ae4b-4055-476b-8676-d499f6af510b"/>
+                <textField textAdjust="StretchHeight">
+                    <reportElement style="Detail" positionType="Float" x="0" y="0" width="113" height="18"
+                                   uuid="c5e4ed4c-e243-4dde-a6f3-8e4a31fad8a3">
+                        <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                                  value="9f49b405-0fe7-4b3e-9ff8-6e3bda01fc6f"/>
+                    </reportElement>
+                    <textElement>
+                        <font size="14"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{agentID}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="StretchHeight">
+                    <reportElement style="Detail" positionType="Float" x="80" y="0" width="113" height="18"
+                                   uuid="cf44caa5-170d-42e6-a79d-b6f9c38792f4">
+                        <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                                  value="d384a80d-c11f-4dff-923a-187518fbe5cd"/>
+                    </reportElement>
+                    <textElement>
+                        <font size="14"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{totalNumberOfCalls}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="StretchHeight">
+                    <reportElement style="Detail" positionType="Float" x="226" y="0" width="113" height="18"
+                                   uuid="7f7f5672-7cc8-404c-85f5-f13118424d11">
+                        <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                                  value="f9a4f4e0-2d1d-40ea-bb6e-42e6cd93d3eb"/>
+                    </reportElement>
+                    <textElement>
+                        <font size="14"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{totalTalkTime}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="StretchHeight">
+                    <reportElement style="Detail" positionType="Float" x="339" y="0" width="113" height="18"
+                                   uuid="bbed0d1f-fcce-42f4-9c28-2f56dd367b01">
+                        <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                                  value="fd83d692-961a-48e1-b961-dd00e0aea2e1"/>
+                    </reportElement>
+                    <textElement>
+                        <font size="14"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{longestTalkTime}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="StretchHeight">
+                    <reportElement style="Detail" positionType="Float" x="452" y="0" width="113" height="18"
+                                   uuid="30427799-2360-4ee4-9d86-eaa7730db16f">
+                        <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                                  value="2110214b-a3ce-4237-ad7b-f46a6a3b1d78"/>
+                    </reportElement>
+                    <textElement>
+                        <font size="14"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{shortestTalkTime}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="StretchHeight">
+                    <reportElement style="Detail" positionType="Float" x="565" y="0" width="113" height="18"
+                                   uuid="4dd6151d-1f19-49ce-9a36-618f778ba7c6">
+                        <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                                  value="a0f35f4e-f186-4e3f-b39d-6276da0c4ca6"/>
+                    </reportElement>
+                    <textElement>
+                        <font size="14"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{totalTimeNotReady}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="StretchHeight">
+                    <reportElement style="Detail" positionType="Float" x="678" y="0" width="113" height="18"
+                                   uuid="ec84c552-6bf5-48b3-8de5-6aaacbf32b53">
+                        <property name="com.jaspersoft.studio.spreadsheet.connectionID"
+                                  value="baf79210-f935-44e0-9fa9-3f9af97cb473"/>
+                    </reportElement>
+                    <textElement>
+                        <font size="14"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{averageNumberOfCalls}]]></textFieldExpression>
+                </textField>
+            </frame>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="7" splitType="Stretch">
+            <line>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1"
+                               uuid="501ac6c4-e9d4-43cb-ba6b-7f2f44394cf3"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineColor="#999999"/>
+                </graphicElement>
+            </line>
+        </band>
+    </columnFooter>
+    <pageFooter>
+        <band height="25" splitType="Stretch">
+            <frame>
+                <reportElement mode="Opaque" x="0" y="0" width="802" height="25" forecolor="#D0B48E" backcolor="#000000"
+                               uuid="ffb10ec8-0371-4545-8eaa-96d62ad3cec0"/>
+                <textField evaluationTime="Report">
+                    <reportElement style="Column header" x="757" y="3" width="40" height="20" forecolor="#FFFFFF"
+                                   uuid="b5521ea6-5f36-4864-856f-58d0bcd011f2"/>
+                    <textElement verticalAlignment="Middle">
+                        <font size="10" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement style="Column header" x="677" y="3" width="80" height="20" forecolor="#FFFFFF"
+                                   uuid="e625ea3c-1741-4cfe-81cf-fbbdd00162c8"/>
+                    <textElement textAlignment="Right" verticalAlignment="Middle">
+                        <font size="10" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+                </textField>
+                <textField pattern="EEEEE dd MMMMM yyyy">
+                    <reportElement style="Column header" x="2" y="3" width="197" height="20" forecolor="#FFFFFF"
+                                   uuid="0c9f7e91-d3f5-47f9-82b7-0b2b3a43a5d6"/>
+                    <textElement verticalAlignment="Middle">
+                        <font size="10" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+                </textField>
+            </frame>
+        </band>
+    </pageFooter>
+    <summary>
+        <band splitType="Stretch"/>
+    </summary>
+</jasperReport>

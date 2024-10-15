@@ -6,6 +6,127 @@
 
 <h:head>
     <title>Agent Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .summary-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .summary-box {
+            padding: 25px;
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            border-radius: 12px;
+            width: 30%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .summary-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .summary-box h2 {
+            font-size: 42px;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .summary-box p {
+            font-size: 18px;
+            margin: 10px 0 0;
+            opacity: 0.9;
+        }
+
+        .agent-table {
+            width: 100%;
+            margin-bottom: 40px;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .agent-table .ui-datatable-header {
+            font-weight: 600;
+            color: #fff;
+            background-color: #3498db;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .agent-table td {
+            padding: 12px;
+            text-align: center;
+            background-color: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .agent-table tr td:first-child {
+            border-left: 1px solid #e0e0e0;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        .agent-table tr td:last-child {
+            border-right: 1px solid #e0e0e0;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .ui-commandbutton {
+            margin-top: 25px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            font-size: 16px;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .ui-commandbutton:hover {
+            background-color: #2980b9;
+        }
+
+        .ui-inputswitch {
+            vertical-align: middle;
+        }
+
+        #chartId {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+    </style>
 
     <script type="text/javascript">
         function resetFocus() {
@@ -16,14 +137,40 @@
 </h:head>
 
 <h:body>
-    <h:form>
-        <p:panel header="Call Center Management Dashboard" styleClass="container">
-            <h1>Agents:</h1>
+    <div class="container">
+        <h1>Call Center Management Dashboard</h1>
+
+        <h:form id="summaryStatsForm">
+            <div class="summary-section">
+                <div class="summary-box">
+                    <h2>#{callCenterSystemController.averageTalkTime}</h2>
+                    <p>Average Talk Time</p>
+                </div>
+                <div class="summary-box">
+                    <h2>#{callCenterSystemController.longestTalkTime}</h2>
+                    <p>Longest Talk Time</p>
+                </div>
+                <div class="summary-box">
+                    <h2>#{callCenterSystemController.totalCallsToday}</h2>
+                    <p>Total Calls</p>
+                </div>
+            </div>
+
+            <p:poll interval="5" listener="#{callCenterSystemController.refreshSummary}" update="summaryStatsForm"/>
+        </h:form>
+
+        <h:form id="chartId">
+            <p:chart type="pie" model="#{callCenterSystemController.pieModel}" style="width:400px;height:300px"/>
+            <p:poll interval="5" listener="#{callCenterSystemController.refreshChart}" update=":chartId"/>
+        </h:form>
+
+        <h:form>
+            <h1>Agents</h1>
 
             <p:poll interval="1" listener="#{callCenterSystemController.refreshAgents}" update="agentTable"/>
 
             <p:dataTable id="agentTable" value="#{callCenterSystemController.agents}" var="agent" responsive="true"
-                         paginator="false" styleClass="agent-table">
+                         paginator="false" styleClass="agent-table" rowStyleClass="ui-widget-content">
 
                 <p:column headerText="Agent ID">
                     <h:outputText value="#{agent.agentID}"/>
@@ -53,41 +200,16 @@
                                    disabled="#{agent.status == 'ON_CALL'}">
                         <p:ajax listener="#{callCenterSystemController.toggleAgentStatus(agent.agentID)}"
                                 update="agentTable"
+                                process="@this"
                                 oncomplete="resetFocus()"/>
                     </p:inputSwitch>
                 </p:column>
             </p:dataTable>
 
-            <h1>Calls:</h1>
-            <p:poll interval="1" listener="#{callCenterSystemController.refreshCalls}" update="callTable"/>
-
-            <p:dataTable id="callTable" value="#{callCenterSystemController.calls}" var="call" responsive="true"
-                         paginator="false" styleClass="call-table">
-
-                <p:column headerText="Call ID">
-                    <h:outputText value="#{call.callID}"/>
-                </p:column>
-
-                <p:column headerText="Agent ID">
-                    <h:outputText value="#{call.agentID}"/>
-                </p:column>
-
-                <p:column headerText="Start Time">
-                    <h:outputText value="#{call.startTime}"/>
-                </p:column>
-
-                <p:column headerText="End Time">
-                    <h:outputText value="#{call.endTime}"/>
-                </p:column>
-
-                <p:column headerText="Duration">
-                    <h:outputText value="#{call.formattedDuration}"/>
-                </p:column>
-            </p:dataTable>
-
-        </p:panel>
-    </h:form>
+            <h:commandButton value="Export daily performance report"
+                             action="#{callCenterSystemController.exportDailyReport}"
+                             styleClass="ui-commandbutton"/>
+        </h:form>
+    </div>
 </h:body>
 </html>
-
-

@@ -4,9 +4,15 @@ public interface SummaryService {
 
     int getTotalAgents();
 
-    int getReadyAgents();
+    int getAgentsOnCall();
 
-    int getNotReadyAgents();
+    int getAgentsReady();
 
-    int getOnCallAgents();
+    int getAgentsNotReady();
+
+    String getAverageTalkTime();
+
+    String getLongestTalkTime();
+
+    long getTotalCallsToday();
 }

@@ -17,4 +17,6 @@ public interface CallRepository {
     void updateCall(Call call);
 
     List<Call> findCallsByAgentId(String agentID);
+
+    void deleteAll();
 }

@@ -15,4 +15,6 @@ public interface AgentRepository {
     Agent findAgentById(String agentID);
 
     void updateAgentStatusTime(Agent agent);
+
+    void resetDailyAgentPerformance();
 }
