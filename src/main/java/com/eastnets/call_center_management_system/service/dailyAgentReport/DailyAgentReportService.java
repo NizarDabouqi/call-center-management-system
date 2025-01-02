@@ -6,7 +6,12 @@ import com.eastnets.call_center_management_system.model.DailyAgentReport;
 import com.eastnets.call_center_management_system.repository.agent.AgentRepository;
 import com.eastnets.call_center_management_system.repository.call.CallRepository;
 import com.eastnets.call_center_management_system.repository.dailyAgentReport.DailyAgentReportRepository;
-import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -44,6 +49,7 @@ public class DailyAgentReportService implements AgentReportService {
                 report.setAgentID(agent.getAgentID());
             }
 
+            report.setAgentName(agent.getAgentName());
             report.setTotalNumberOfCalls(agent.getTotalNumberOfCalls());
 
             List<Call> calls = callRepository.findCallsByAgentId(agent.getAgentID());
@@ -80,24 +86,7 @@ public class DailyAgentReportService implements AgentReportService {
         }
     }
 
-    private double calculateAverageNumberOfCalls(Agent agent) {
-        long totalCallsForAllAgents = agentRepository.findAllAgents()
-                .stream()
-                .mapToLong(Agent::getTotalNumberOfCalls)
-                .sum();
-
-        if (totalCallsForAllAgents == 0) {
-            return 0.0;
-        }
-
-        double average = (double) agent.getTotalNumberOfCalls() / totalCallsForAllAgents;
-
-        BigDecimal roundedAverage = BigDecimal.valueOf(average)
-                .setScale(3, RoundingMode.HALF_UP);
-
-        return roundedAverage.doubleValue();
-    }
-
+    @Override
     public byte[] exportDailyReportToPDF() throws JRException, IOException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("dailyAgentReport.jrxml");
 
@@ -115,5 +104,23 @@ public class DailyAgentReportService implements AgentReportService {
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
         return JasperExportManager.exportReportToPdf(jasperPrint);
+    }
+
+    private double calculateAverageNumberOfCalls(Agent agent) {
+        long totalCallsForAllAgents = agentRepository.findAllAgents()
+                .stream()
+                .mapToLong(Agent::getTotalNumberOfCalls)
+                .sum();
+
+        if (totalCallsForAllAgents == 0) {
+            return 0.0;
+        }
+
+        double average = (double) agent.getTotalNumberOfCalls() / totalCallsForAllAgents;
+
+        BigDecimal roundedAverage = BigDecimal.valueOf(average)
+                .setScale(3, RoundingMode.HALF_UP);
+
+        return roundedAverage.doubleValue();
     }
 }

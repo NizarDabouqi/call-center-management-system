@@ -79,11 +79,6 @@ public class CallCenterSystemController implements Serializable {
         agents = agentService.getAllAgents();
     }
 
-    public void refreshCalls() {
-        calls = callService.getAllCalls();
-        loadCallSummary();
-    }
-
     public void refreshChart() {
         loadAgentSummary();
         createPieModel();

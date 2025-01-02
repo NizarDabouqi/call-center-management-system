@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
@@ -25,7 +26,7 @@ public class InitiateCallServiceImpl implements InitiateCallService {
 
     private static long lastCallID = 0;
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 30000)
     @Override
     public void insertCall() {
         List<Agent> readyAgents = agentRepository.findAgentsByStatus(AgentStatus.READY.name());
@@ -44,7 +45,7 @@ public class InitiateCallServiceImpl implements InitiateCallService {
         callRepository.saveCall(newCall);
 
         assignedAgent.setStatus(AgentStatus.ON_CALL);
-        assignedAgent.setStatusUpdateTime(0);
+        assignedAgent.setStatusChangeTimestamp(LocalDateTime.now());
         agentRepository.updateAgentState(assignedAgent);
     }
 }

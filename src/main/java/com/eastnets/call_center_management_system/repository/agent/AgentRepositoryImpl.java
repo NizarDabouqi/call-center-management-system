@@ -34,15 +34,15 @@ public class AgentRepositoryImpl implements AgentRepository {
 
     @Override
     public void updateAgentState(Agent agent) {
-        String sql = "UPDATE Agent SET status = :status, statusUpdateTime = :statusUpdateTime, "
-                + "totalNumberOfCalls = :totalNumberOfCalls, totalTimeNotReady = :totalTimeNotReady "
+        String sql = "UPDATE Agent SET status = :status, totalNumberOfCalls = :totalNumberOfCalls, "
+                + "totalTimeNotReady = :totalTimeNotReady, statusChangeTimestamp = :statusChangeTimestamp "
                 + "WHERE AgentID = :agentID";
 
         Map<String, Object> params = new HashMap<>();
         params.put("status", agent.getStatus().name());
-        params.put("statusUpdateTime", agent.getStatusUpdateTime());
         params.put("totalNumberOfCalls", agent.getTotalNumberOfCalls());
         params.put("totalTimeNotReady", agent.getTotalTimeNotReady());
+        params.put("statusChangeTimestamp", agent.getStatusChangeTimestamp());
         params.put("agentID", agent.getAgentID());
 
         namedParameterJdbcTemplate.update(sql, params);
@@ -58,31 +58,20 @@ public class AgentRepositoryImpl implements AgentRepository {
         return namedParameterJdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Agent.class));
     }
 
-    @Override
-    public void updateAgentStatusTime(Agent agent) {
-        String sql = "UPDATE Agent SET statusUpdateTime = :statusUpdateTime WHERE AgentID = :agentID";
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("statusUpdateTime", agent.getStatusUpdateTime());
-        params.put("agentID", agent.getAgentID());
-
-        namedParameterJdbcTemplate.update(sql, params);
-    }
-
-    @Override
-    public void resetDailyAgentPerformance() {
-        String sql = "UPDATE Agent " +
-                "SET status = :status, " +
-                "totalNumberOfCalls = :totalNumberOfCalls, " +
-                "statusUpdateTime = :statusUpdateTime, " +
-                "totalTimeNotReady = :totalTimeNotReady";
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("status", "NOT_READY");
-        params.put("totalNumberOfCalls", 0);
-        params.put("statusUpdateTime", 0);
-        params.put("totalTimeNotReady", 0);
-
-        namedParameterJdbcTemplate.update(sql, params);
-    }
+//    @Override
+//    public void resetDailyAgentPerformance() {
+//        String sql = "UPDATE Agent " +
+//                "SET status = :status, " +
+//                "totalNumberOfCalls = :totalNumberOfCalls, " +
+//                "statusUpdateTime = :statusUpdateTime, " +
+//                "totalTimeNotReady = :totalTimeNotReady";
+//
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("status", "NOT_READY");
+//        params.put("totalNumberOfCalls", 0);
+//        params.put("statusUpdateTime", 0);
+//        params.put("totalTimeNotReady", 0);
+//
+//        namedParameterJdbcTemplate.update(sql, params);
+//    }
 }

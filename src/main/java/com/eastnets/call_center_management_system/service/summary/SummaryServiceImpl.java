@@ -5,9 +5,7 @@ import com.eastnets.call_center_management_system.model.AgentStatus;
 import com.eastnets.call_center_management_system.model.Call;
 import com.eastnets.call_center_management_system.repository.agent.AgentRepository;
 import com.eastnets.call_center_management_system.repository.call.CallRepository;
-import com.eastnets.call_center_management_system.repository.dailyAgentReport.DailyAgentReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,9 +20,6 @@ public class SummaryServiceImpl implements SummaryService {
 
     @Autowired
     private CallRepository callRepository;
-
-    @Autowired
-    private DailyAgentReportRepository dailyAgentReportRepository;
 
     @Override
     public int getTotalAgents() {
@@ -95,16 +90,18 @@ public class SummaryServiceImpl implements SummaryService {
     @Override
     public long getTotalCallsToday() {
         LocalDateTime startOfDay = LocalDateTime.now().toLocalDate().atStartOfDay();
-        return (int) callRepository.findAllCalls().stream()
-                .filter(call -> call.getStartTime().isAfter(startOfDay))
+
+        return callRepository.findAllCalls().stream()
+                .filter(call -> call.getStartTime().isAfter(startOfDay) && call.getEndTime() != null)
                 .count();
     }
 
-    @Scheduled(cron = "0 */3 * * * ?") // @Scheduled(cron = "0 0 0 * * ?")
-    public void resetDailyData() {
-        callRepository.deleteAll();
-        dailyAgentReportRepository.deleteAll();
-        agentRepository.resetDailyAgentPerformance();
-    }
+
+//    @Scheduled(cron = "0 */3 * * * ?") // @Scheduled(cron = "0 0 0 * * ?")
+//    public void resetDailyData() {
+//        callRepository.deleteAll();
+//        dailyAgentReportRepository.deleteAll();
+//        agentRepository.resetDailyAgentPerformance();
+//    }
 }
 

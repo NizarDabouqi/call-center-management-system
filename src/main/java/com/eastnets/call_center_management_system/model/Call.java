@@ -26,12 +26,5 @@ public class Call {
         this.startTime = LocalDateTime.now();
         this.endTime = null;
         this.durationInSeconds = 0;
-        this.endCallMessage = "";
-    }
-
-    public String getFormattedDuration() {
-        long minutes = durationInSeconds / 60;
-        long seconds = durationInSeconds % 60;
-        return String.format("%02d:%02d", minutes, seconds);
     }
 }

@@ -58,7 +58,7 @@ public class CloseCallServiceImpl implements CloseCallService {
 
             Agent agent = agentRepository.findAgentById(call.getAgentID());
             agent.setStatus(AgentStatus.READY);
-            agent.setStatusUpdateTime(0);
+            agent.setStatusChangeTimestamp(LocalDateTime.now());
             agent.setTotalNumberOfCalls(agent.getTotalNumberOfCalls() + 1);
             agentRepository.updateAgentState(agent);
         }

@@ -30,7 +30,8 @@ public class DailyAgentReportRepositoryImpl implements DailyAgentReportRepositor
             String updateSql = "UPDATE DailyAgentReport SET totalNumberOfCalls = :totalNumberOfCalls, " +
                     "totalTalkTime = :totalTalkTime, longestTalkTime = :longestTalkTime, " +
                     "shortestTalkTime = :shortestTalkTime, totalTimeNotReady = :totalTimeNotReady, " +
-                    "averageNumberOfCalls = :averageNumberOfCalls WHERE agentID = :agentID";
+                    "averageNumberOfCalls = :averageNumberOfCalls, agentName = :agentName " +  // Add agentName to UPDATE
+                    "WHERE agentID = :agentID";
 
             Map<String, Object> updateParams = new HashMap<>();
             updateParams.put("totalNumberOfCalls", report.getTotalNumberOfCalls());
@@ -39,18 +40,20 @@ public class DailyAgentReportRepositoryImpl implements DailyAgentReportRepositor
             updateParams.put("shortestTalkTime", report.getShortestTalkTime());
             updateParams.put("totalTimeNotReady", report.getTotalTimeNotReady());
             updateParams.put("averageNumberOfCalls", report.getAverageNumberOfCalls());
+            updateParams.put("agentName", report.getAgentName());
             updateParams.put("agentID", report.getAgentID());
 
             namedParameterJdbcTemplate.update(updateSql, updateParams);
 
         } else {
-            String insertSql = "INSERT INTO DailyAgentReport (agentID, totalNumberOfCalls, totalTalkTime, " +
+            String insertSql = "INSERT INTO DailyAgentReport (agentID, agentName, totalNumberOfCalls, totalTalkTime, " +  // Add agentName to INSERT
                     "longestTalkTime, shortestTalkTime, totalTimeNotReady, averageNumberOfCalls) " +
-                    "VALUES (:agentID, :totalNumberOfCalls, :totalTalkTime, :longestTalkTime, :shortestTalkTime, " +
-                    ":totalTimeNotReady, :averageNumberOfCalls)";
+                    "VALUES (:agentID, :agentName, :totalNumberOfCalls, :totalTalkTime, :longestTalkTime, " +
+                    ":shortestTalkTime, :totalTimeNotReady, :averageNumberOfCalls)";
 
             Map<String, Object> insertParams = new HashMap<>();
             insertParams.put("agentID", report.getAgentID());
+            insertParams.put("agentName", report.getAgentName());
             insertParams.put("totalNumberOfCalls", report.getTotalNumberOfCalls());
             insertParams.put("totalTalkTime", report.getTotalTalkTime());
             insertParams.put("longestTalkTime", report.getLongestTalkTime());

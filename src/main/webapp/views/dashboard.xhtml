@@ -132,6 +132,25 @@
         function resetFocus() {
             document.activeElement.blur();
         }
+
+        function startTimers() {
+            document.querySelectorAll('.status-timer').forEach(function(timer) {
+                var startTime = new Date(timer.dataset.startTime);
+                setInterval(function() {
+                    var now = new Date();
+                    var diff = Math.floor((now - startTime) / 1000);
+                    var hours = Math.floor(diff / 3600);
+                    var minutes = Math.floor((diff % 3600) / 60);
+                    var seconds = diff % 60;
+                    timer.textContent =
+                        String(hours).padStart(2, '0') + ':' +
+                        String(minutes).padStart(2, '0') + ':' +
+                        String(seconds).padStart(2, '0');
+                }, 1000);
+            });
+        }
+
+        window.onload = startTimers;
     </script>
 
 </h:head>
@@ -185,7 +204,9 @@
                 </p:column>
 
                 <p:column headerText="Status Update Time">
-                    <h:outputText value="#{agent.formattedStatusUpdateTime}"/>
+                    <h:outputText id="statusTimer" value="#{agent.formattedStatusUpdateTime}" styleClass="status-timer">
+                        <f:attribute name="data-start-time" value="#{agent.statusChangeTimestamp}"/>
+                    </h:outputText>
                 </p:column>
 
                 <p:column headerText="Total Calls">
@@ -197,11 +218,11 @@
                                    value="#{agent.ready}"
                                    onLabel="Ready"
                                    offLabel="Not Ready"
-                                   disabled="#{agent.status == 'ON_CALL'}">
+                                   rendered="#{agent.status != 'ON_CALL'}">
                         <p:ajax listener="#{callCenterSystemController.toggleAgentStatus(agent.agentID)}"
                                 update="agentTable"
                                 process="@this"
-                                oncomplete="resetFocus()"/>
+                                oncomplete="resetFocus(); startTimers();"/>
                     </p:inputSwitch>
                 </p:column>
             </p:dataTable>

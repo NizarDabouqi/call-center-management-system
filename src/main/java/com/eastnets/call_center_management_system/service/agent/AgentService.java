@@ -8,7 +8,5 @@ public interface AgentService {
 
     List<Agent> getAllAgents();
 
-    void trackAgentStatusUpdateTime();
-
     void toggleAgentStatus(String agentID);
 }
